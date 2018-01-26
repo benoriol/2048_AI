@@ -27,38 +27,47 @@ class Board:
 
         self.addTile(pos[0], pos[1], size)
 
+
+    def packTiles(self, col):
+        import numpy as np
+        NnonZeros = np.count_nonzero(col)
+        col[0:NnonZeros] = [val for val in col if val != 0]
+        col[NnonZeros:] *= 0
+        return NnonZeros
+
+    def mergeTiles(self, col):
+        import numpy as np
+
+        NnonZeros = self.packTiles(col)
+
+        if(NnonZeros > 1):
+            for x in range(NnonZeros-1):
+                if col[x] == col[x+1]:
+                    col[x] *= 2
+                    col[:-1] = np.delete(col, x+1)
+                    col[-1] = 0
+
     def moveUp(self):
         for y in range(self.N):
-            for x in range(self.N):
-                i = 0
-                while (self.board[x, y] == 0) & (i < 3):
-                    self.board[x:-1, y] = self.board[x+1:, y]
-                    self.board[-1, y] = 0
-                    i += 1
+            self.mergeTiles(self.board[:,y])
 
-            for x in range(self.N-1):
-                if (self.board[x,y] == self.board[x+1, y]) & (self.board[x,y] != 0):
-                    self.board[x,y] *= 2
-                    self.board[-1] = 0
-                    if x < self.N - 2:
-                        self.board[x+1:-1] = self.board[x+2:, y]
-
-    def move(self, dir):
+    def move(self, direction):
         import numpy as np
-        if dir == 'u':
+        if direction == 'u':
             self.moveUp()
-        elif dir == 'r':
+        elif direction == 'r':
             self.board = np.rot90(self.board, 1)
             self.moveUp()
             self.board = np.rot90(self.board, 3)
-        elif dir == 'l':
+        elif direction == 'l':
             self.board = np.rot90(self.board, 3)
             self.moveUp()
             self.board = np.rot90(self.board, 1)
-        elif dir == 'd':
+        elif direction == 'd':
             self.board = np.rot90(self.board, 2)
             self.moveUp()
             self.board = np.rot90(self.board, 2)
+
 
 
 
