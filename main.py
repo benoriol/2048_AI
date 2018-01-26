@@ -14,12 +14,3 @@ while True:
     b.move(movDir)
     b.addTileRand(2)
     print b.board
-
-"""
-init = np.zeros((4,4))
-init[1:, 3] = [4, 4, 16]
-b = Game.Board(init)
-print b.board
-b.move('d')
-print b.board
-"""
