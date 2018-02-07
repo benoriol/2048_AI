@@ -1,16 +1,14 @@
 import Game
-import numpy as np
-
 
 Ninit = 3
-init = np.zeros((1,1))-1
-b = Game.Board(init)
+b = Game.Board()
 
-for i in range(Ninit):
-    b.addTileRand(2)
-print b.board
-while True:
-    movDir = raw_input('Movement: ')
+print(b.board)
+while not (b.Lost()):
+    movDir = input('Next movement: ')
     b.move(movDir)
-    b.addTileRand(2)
-    print b.board
+    print(b.board)
+    print('Score: ' + str(b.score))
+
+print(' ----- GAME OVER -----')
+print( 'FINAL SCORE: ' + str(b.score))
