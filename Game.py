@@ -1,11 +1,15 @@
+import numpy as np
+import random
+
 
 class Board:
 
-    PTwoTiles = 0.2
-    PTileIsFour = 0.3
-
     def __init__(self, initMatrix = [[-1]], N = 4, Ninit = 3):
-        import numpy as np
+
+        self.PTwoTiles = 0.2
+        self.PTileIsFour = 0.3
+
+        self.MOVE_DICT = {0: 'd', 1: 'r', 2: 'u', 3: 'l'}
 
         self.N = N
         if ((initMatrix[0][0]) != -1):
@@ -22,7 +26,6 @@ class Board:
         self.board[x, y] = size
 
     def emptyTiles(self):
-        import numpy as np
         NEmpty = 0
         empty = np.zeros((16, 2), dtype='i4')
         for x in range(4):
@@ -35,7 +38,6 @@ class Board:
     #Adds tile of given value in a random position:
     #If no argument is passed, if might add o or two tiles of vslue 2 or 4, determined randomly
     def addTileRand(self, size = -1):
-        import random
 
         (empty, NEmpty) = self.emptyTiles()
         pos = random.choice(empty[:NEmpty])
@@ -45,16 +47,19 @@ class Board:
             for n in range(N):
                 size = 2 * ((random.randint(0, 1) < self.PTileIsFour) + 1)
                 (empty, NEmpty) = self.emptyTiles()
-                pos = random.choice(empty[:NEmpty])
-                self.addTile(pos[0], pos[1], size)
+                if NEmpty > 0:
+                    pos = random.choice(empty[:NEmpty])
+                    self.addTile(pos[0], pos[1], size)
+
+
         elif size != -1:
             (empty, NEmpty) = self.emptyTiles()
-            pos = random.choice(empty[:NEmpty])
-            self.addTile(pos[0], pos[1], size)
+            if NEmpty > 0:
+                pos = random.choice(empty[:NEmpty])
+                self.addTile(pos[0], pos[1], size)
 
     # Puts all the tiles together in upwards direction
     def packTiles(self, col):
-        import numpy as np
         NnonZeros = np.count_nonzero(col)
         col[0:NnonZeros] = [val for val in col if val != 0]
         col[NnonZeros:] *= 0
@@ -62,7 +67,6 @@ class Board:
 
     # Merges the tiles that are the same value AND directly next to each other
     def mergeTiles(self, col):
-        import numpy as np
 
         NnonZeros = self.packTiles(col)
 
@@ -81,7 +85,8 @@ class Board:
 
     # Executes a movement in a given direction
     def move(self, direction):
-        import numpy as np
+        self.lastScore = self.score
+
         lastBoard = np.array(self.board)
         if direction == 'u':
             self.moveUp()
@@ -99,6 +104,16 @@ class Board:
             self.board = np.rot90(self.board, 2)
         if not(np.array_equal(lastBoard, self.board)):
             self.addTileRand()
+        self.score_increment = self.score - self.lastScore
+
+    def step(self, action):
+        self.move(self.MOVE_DICT[action])
+        return [self.board, self.reward(), self.Lost(), np.max(self.board)]
+
+    def reward(self):
+        n = np.count_nonzero(self.board)
+        # return (8.0 - n)/16.0 * self.score_increment
+        return self.score_increment
 
     # Returns True if the player can't do any movement
     def Lost (self):
@@ -107,8 +122,11 @@ class Board:
             for x in range(self.N):
                 for y in range(self.N-1):
                     if (self.board[y, x] == self.board[y+1, x]) | (self.board[x, y] == 0):
+                        self.board = np.rot90(self.board, 4-n)
                         return False
-                if self.board[self.N, x] == 0:
+                if self.board[self.N-1, x] == 0:
+                    self.board = np.rot90(self.board, 4 - n)
                     return False
             self.board = np.rot90(self.board, 1)
+        self.board = np.rot90(self.board, 4 - n)
         return True
