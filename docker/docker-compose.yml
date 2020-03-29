@@ -1,0 +1,26 @@
+version: '2.3'
+
+services:
+
+  ai2048:
+    image: ai2048
+    container_name: ai2048
+    working_dir: /home
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - PYTHONPATH=/home
+    volumes:
+      - ../:/home
+    runtime: nvidia
+    command: tail /dev/null -f
+  tensorboard:
+    image: tensorflow/tensorflow
+    container_name: tensorboard
+    working_dir: /logs
+    ports:
+     - "6006:6006"
+    volumes:
+      - ../src/tensorboard:/logs
+    command: tensorboard --logdir /logs

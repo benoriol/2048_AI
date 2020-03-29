@@ -1,0 +1,8 @@
+setuptools==41.0.1
+numpy
+ipython
+torch
+matplotlib
+tqdm
+tensorboard
+pyyaml

@@ -1,0 +1,25 @@
+seed: 111
+mode: train
+iterations: 1000
+gpu: yes
+model: qnet
+telegram: no
+tensorboard: no
+game:
+  N: 4
+  init_tiles: 3
+agent:
+  gamma: 0.99
+  alpha: 1e-3
+  weight_decay: 1e-5
+  start_learning: 100
+  learning_freq: 50
+  target_update_freq: 1
+  save_weights: yes
+  save_weights_freq: 10
+buffer:
+  memory_size: 50000
+  batch_size: 32
+paths:
+  weights: /home/weights/
+  tensorboard: /home/tensorboard/
