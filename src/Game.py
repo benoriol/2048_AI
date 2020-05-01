@@ -4,23 +4,26 @@ import random
 
 class Board:
 
-    def __init__(self, initMatrix = [[-1]], N = 4, Ninit = 3):
+    def __init__(self, N = 4, Ninit = 3):
 
         self.PTwoTiles = 0.2
         self.PTileIsFour = 0.3
 
         self.MOVE_DICT = {0: 'd', 1: 'r', 2: 'u', 3: 'l'}
 
+        self.Ninit = Ninit
         self.N = N
-        if ((initMatrix[0][0]) != -1):
-            self.board = initMatrix
-        else:
-            self.board = np.zeros((self.N, self.N))
 
-        for i in range(Ninit):
+        self.reset()
+
+    def reset(self):
+
+        self.board = np.zeros((self.N, self.N))
+        self.score = 0
+
+        for i in range(self.Ninit):
             self.addTileRand(2)
 
-        self.score = 0
 
     def addTile(self, x, y, size):
         self.board[x, y] = size

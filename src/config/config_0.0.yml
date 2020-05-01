@@ -1,6 +1,6 @@
 seed: 111
 mode: train
-iterations: 1000
+iterations: 1
 gpu: yes
 model: qnet
 telegram: no
@@ -11,6 +11,8 @@ game:
 agent:
   gamma: 0.99
   alpha: 1e-3
+  eps_ini: 0.9
+  eps_fin: 0.001
   weight_decay: 1e-5
   start_learning: 100
   learning_freq: 50

@@ -1,3 +1,4 @@
+import math
 import os
 import random
 import torch
@@ -8,11 +9,12 @@ from random import choice
 from collections import defaultdict
 
 class Agent:
-	def __init__(self, cfg, weights_path):
+	def __init__(self, cfg, weights_path, iterations):
 
 		# General params
 		self.movements = 0
 		self.maxTile = 0
+		self.eps_scheduled = lambda index: cfg['eps_fin'] + (cfg['eps_ini'] - cfg['eps_fin']) * math.exp(-1. * index / int(iterations / 7))
 
 		# NN parameters
 		self.gamma = cfg['gamma']
@@ -49,6 +51,14 @@ class Agent:
 		self.maxTile = 0
 		self.done = False
 		self.loss = 0
+
+	def selectAction(self, state, it):
+		# if random.random() > self.eps_scheduled(it):
+		# 	q_values = self.forward(state)
+		# 	return int(q_values.argmax())
+		# else:
+		# 	return random.randint(0,3)
+		return random.randint(0,3)
 
 	def forward(self, state):
 		state = torch.from_numpy(state).type(self.dtype)
