@@ -11,11 +11,11 @@ game:
 agent:
   gamma: 0.99
   alpha: 0.001
-  eps_ini: 1
+  eps_ini: 0.7
   eps_fin: 0.001
   weight_decay: 1e-5
   start_learning: 100
-  target_update_freq: 1
+  target_update_freq: 10
   save_weights: yes
   save_weights_freq: 10
 buffer:

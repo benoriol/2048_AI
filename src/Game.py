@@ -5,8 +5,8 @@ class Board:
 
     def __init__(self, N = 4, Ninit = 3):
 
-        self.PTwoTiles = 0.2
-        self.PTileIsFour = 0.3
+        self.PTwoTiles = 0.1
+        self.PTileIsFour = 0.15
 
         self.MOVE_DICT = {0: 'd', 1: 'r', 2: 'u', 3: 'l'}
 

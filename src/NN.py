@@ -9,8 +9,8 @@ class QNet(nn.Module):
 		super(QNet, self).__init__()
 		self.fc1 = nn.Linear(16, 32)
 		self.fc2 = nn.Linear(32, 64)
-		self.fc2 = nn.Linear(64, 32)
-		self.fc2 = nn.Linear(32, 4)
+		self.fc3 = nn.Linear(64, 32)
+		self.fc4 = nn.Linear(32, 4)
 	def forward(self, x):
 		(_, H, W) = x.data.size()
 		x = x.view(-1, H * W)
