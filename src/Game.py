@@ -1,7 +1,6 @@
 import numpy as np
 import random
-
-
+from IPython import embed
 class Board:
 
     def __init__(self, N = 4, Ninit = 3):
@@ -109,9 +108,14 @@ class Board:
             self.addTileRand()
         self.score_increment = self.score - self.lastScore
 
+    def getLogBoard(self):
+        state = self.board
+        state[state==0] = 1
+        return np.log2(self.board)/np.log2(4096)
+
     def step(self, action):
         self.move(self.MOVE_DICT[action])
-        return [self.board, self.reward(), self.Lost(), np.max(self.board)]
+        return [self.getLogBoard(), self.reward(), self.Lost(), np.max(self.board)]
 
     def reward(self):
         n = np.count_nonzero(self.board)

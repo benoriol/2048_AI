@@ -21,7 +21,6 @@ class Agent:
 		self.alpha_nn = cfg['alpha']
 		self.weight_decay = cfg['weight_decay']
 		self.start_learning = cfg['start_learning']
-		self.learning_freq = cfg['learning_freq']
 		self.target_update_freq = cfg['target_update_freq']
 		self.loss = 0
 
@@ -41,10 +40,10 @@ class Agent:
 	def initNN(self):
 		self.nn = QNet()
 		self.target_nn = QNet()
-		self.target_nn.type(self.dtype)
-		# self.optim = torch.optim.Adam(self.nn.parameters(), lr=self.alpha_nn)
-		self.loss_fn = torch.nn.MSELoss()
 		self.nn.type(self.dtype)
+		self.target_nn.type(self.dtype)
+		self.optim = torch.optim.Adam(self.nn.parameters(), lr=self.alpha_nn)
+		self.loss_fn = torch.nn.MSELoss()
 
 	def reset(self, initState):
 		self.movements = 0
@@ -53,16 +52,20 @@ class Agent:
 		self.loss = 0
 
 	def selectAction(self, state, it):
-		# if random.random() > self.eps_scheduled(it):
-		# 	q_values = self.forward(state)
-		# 	return int(q_values.argmax())
-		# else:
-		# 	return random.randint(0,3)
-		return random.randint(0,3)
+		if random.random() > self.eps_scheduled(it):
+			q_values = self.forward(state)
+			return int(q_values.argmax())
+		else:
+			return random.randint(0,3)
 
 	def forward(self, state):
 		state = torch.from_numpy(state).type(self.dtype)
 		return self.nn.forward(state)
+
+	def target_forward(self, state):
+		state = torch.from_numpy(state).type(self.dtype)
+		return self.target_nn.forward(state)
+
 
 	def loadWeights(self, weights):
 		self.nn.load_state_dict(weights)

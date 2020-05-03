@@ -1,7 +1,7 @@
 import numpy as np
 from collections import defaultdict
 from random import randint
-
+from IPython import embed
 
 class Buffer:
 	def __init__(self, cfg):
@@ -29,5 +29,4 @@ class Buffer:
 			seen.append(sample_num)
 			for key in self.buffer_data.keys():
 				sample_data[key].append(self.buffer_data[key][sample_num])
-
 		return sample_data
