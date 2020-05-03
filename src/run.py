@@ -42,6 +42,7 @@ for it in range(config['iterations']):
         counter += 1
 
         # NN training
-        train(buffer, agent)
+        if counter > 50:
+            train(buffer, agent)
 
     # update target NN

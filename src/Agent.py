@@ -52,11 +52,11 @@ class Agent:
 		self.loss = 0
 
 	def selectAction(self, state, it):
-		if random.random() > self.eps_scheduled(it):
-			q_values = self.forward(state)
-			return int(q_values.argmax())
-		else:
-			return random.randint(0,3)
+		# if random.random() > self.eps_scheduled(it):
+		# 	q_values = self.forward(state)
+		# 	return int(q_values.argmax())
+		# else:
+		return random.randint(0,3)
 
 	def forward(self, state):
 		state = torch.from_numpy(state).type(self.dtype)

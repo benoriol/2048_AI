@@ -3,13 +3,13 @@ import numpy as np
 from IPython import embed
 
 def train(buffer, agent):
-    state, action, next_state, reward, done = buffer.sample()
+    data = buffer.sample()
 
-    embed()
-    torch_state = torch.from_numpy(state)
-    torch_action = torch.from_numpy(action)
-    torch_next_state = torch.from_numpy(next_state)
-    torch_reward = torch.from_numpy(reward)
+    torch_state = torch.from_numpy(np.array([m.tolist() for m in data['state']]))
+    torch_action = torch.from_numpy(data['action'])
+    torch_next_state = torch.from_numpy(data['next_state'])
+    torch_reward = torch.from_numpy(data['reward'])
+    torch_done = torch.from_numpy(data['done'])
 
 
     # q_values state
