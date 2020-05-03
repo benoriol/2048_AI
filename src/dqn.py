@@ -21,7 +21,11 @@ def train(buffer, agent):
     next_q_values = agent.target_forward(torch_next_state)
 
     # compute target r + gamma* max q_values next state
-
+    tgt = reward + agent.gamma * torch.max(next_q_values, dim=1)
     # comute loss
+    loss = agent.loss_fn(q_values, tgt)
 
     # step optim stuff
+    agent.optim.zero_grad()
+    loss.backward()
+    agent.optim.step()
