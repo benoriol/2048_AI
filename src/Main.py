@@ -9,6 +9,7 @@ while not (b.Lost()):
     b.move(movDir)
     print(b.board)
     print('Score: ' + str(b.score))
-
+    print('Score increment: ', b.score_increment)
+    kk = b.getLogBoard()
 print(' ----- GAME OVER -----')
 print( 'FINAL SCORE: ' + str(b.score))

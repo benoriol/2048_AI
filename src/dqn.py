@@ -16,7 +16,6 @@ def train(buffer, agent):
     all_q_values = agent.forward(torch_state.float())
     # pick q value of action
     q_values = all_q_values.gather(1, torch_action.unsqueeze(dim=1))
-
     # next q values from next state
     next_q_values = agent.target_forward(torch_next_state.float())
 

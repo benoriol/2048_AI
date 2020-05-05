@@ -5,8 +5,8 @@ class Board:
 
     def __init__(self, N = 4, Ninit = 3):
 
-        self.PTwoTiles = 0.1
-        self.PTileIsFour = 0.15
+        self.PTwoTiles = 0.10
+        self.PTileIsFour = 0.10
 
         self.MOVE_DICT = {0: 'd', 1: 'r', 2: 'u', 3: 'l'}
 
@@ -109,9 +109,9 @@ class Board:
         self.score_increment = self.score - self.lastScore
 
     def getLogBoard(self):
-        state = self.board
+        state = np.copy(self.board)
         state[state==0] = 1
-        return np.log2(self.board)/np.log2(4096)
+        return np.log2(state)/np.log2(4096)
 
     def step(self, action):
         self.move(self.MOVE_DICT[action])
@@ -120,7 +120,7 @@ class Board:
     def reward(self):
         n = np.count_nonzero(self.board)
         # return (8.0 - n)/16.0 * self.score_increment
-        return self.score_increment
+        return np.log2(self.score_increment+1)
 
     # Returns True if the player can't do any movement
     def Lost (self):
